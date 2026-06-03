@@ -2,10 +2,10 @@
 
 ## Informações do Projeto
 
-- **Nome do Aluno:** [Preencher com o seu nome]
-- **Curso:** [Preencher com o seu curso]
-- **Unidade Curricular:** [Preencher com o nome da disciplina]
-- **Data:** Junho de 2026
+- Kenzo Ruthes dos Santos
+- 3º info
+- Codificar aplicações para dispositivos móveis
+- 3/06/2026
 
 ## Objetivo
 
