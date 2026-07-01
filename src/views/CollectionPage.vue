@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { IonPage, IonContent, IonIcon, IonButton } from "@ionic/vue";
 import { imageOutline } from "ionicons/icons";
 import { useRouter } from "vue-router";
@@ -37,7 +37,7 @@ import StickerCard from "@/components/StickerCard.vue";
 import { useAlbum } from "@/composables/useAlbum";
 
 const router = useRouter();
-const { obterColetadas, alternarColetada } = useAlbum();
+const { obterColetadas, alternarColetada, carregarDoLocalStorage } = useAlbum();
 
 const coletadas = computed(() => obterColetadas.value);
 
@@ -48,6 +48,10 @@ const handleToggle = (id: number) => {
 const irParaAlbum = () => {
   router.push("/home");
 };
+
+onMounted(() => {
+  void carregarDoLocalStorage();
+});
 </script>
 
 <style scoped>

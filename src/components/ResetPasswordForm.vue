@@ -62,7 +62,7 @@ const handleResetPassword = async () => {
     return;
   }
 
-  const result = resetPassword(email.value);
+  const result = await resetPassword(email.value);
 
   if (result.success) {
     const alert = await alertController.create({

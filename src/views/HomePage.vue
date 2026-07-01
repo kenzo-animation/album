@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <app-header titulo="Álbum de Figurinhas" :exibirBotaoLogout="true" @logout="handleLogout" />
+    <app-header titulo="Álbum de Figurinhas" :exibirBotaoLogout="true" @logout="handleLogout" @contato="goToContato" />
 
     <ion-content>
       <div class="album-header">
@@ -33,12 +33,23 @@
         </div>
       </div>
 
+
       <sticker-list />
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
+/**
+ * HomePage.vue - Página principal do álbum de figurinhas
+ * 
+ * Exibe:
+ * - Header com logout e botão de contato
+ * - Resumo do álbum (total, coletadas, pendentes, percentual)
+ * - Barra de progresso visual
+ * - Lista de figurinhas com filtros e busca
+ */
+
 import { computed, onMounted } from "vue";
 import { IonPage, IonContent } from "@ionic/vue";
 import { useRouter } from "vue-router";
@@ -46,17 +57,32 @@ import AppHeader from "@/components/AppHeader.vue";
 import StickerList from "@/components/StickerList.vue";
 import { useAlbum } from "@/composables/useAlbum";
 
+// Router para navegação
 const router = useRouter();
+
+// Composable de álbum com funções para manipular figurinhas
 const { calcularProgresso, carregarDoLocalStorage } = useAlbum();
 
+// Computed que calcula o progresso em tempo real
 const progresso = computed(() => calcularProgresso());
 
+// Carrega dados salvos quando página é montada
 onMounted(() => {
-  carregarDoLocalStorage();
+  void carregarDoLocalStorage();
 });
 
+/**
+ * Faz logout do usuário
+ */
 const handleLogout = () => {
   router.push("/login");
+};
+
+/**
+ * Navega para página de contato
+ */
+const goToContato = () => {
+  router.push("/contact");
 };
 </script>
 
@@ -128,5 +154,9 @@ ion-content {
   height: 100%;
   background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
   transition: width 0.3s ease;
+}
+
+.home-actions {
+  padding: 16px 20px 0;
 }
 </style>

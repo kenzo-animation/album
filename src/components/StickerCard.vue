@@ -22,19 +22,36 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * StickerCard.vue - Componente que exibe uma figurinha individual
+ * 
+ * Funcionalidades:
+ * - Exibe imagem, número e nome da figurinha
+ * - Mostra badge "Coletada" quando marcada
+ * - Permite coletar/remover figurinha
+ * - Emite evento ao usuário clicar para alternar status
+ */
+
 import { IonCard, IonCardContent, IonButton } from "@ionic/vue";
 import { type Sticker } from "@/data/stickers";
 
+// Interface para as props do componente
 interface Props {
-  sticker: Sticker;
+  sticker: Sticker; // Dados da figurinha a exibir
 }
 
+// Define as props
 const props = defineProps<Props>();
 
+// Define os eventos emitidos por este componente
 const emit = defineEmits<{
-  toggle: [id: number];
+  toggle: [id: number]; // Emitido quando usuário quer marcar/desmarcar figurinha
 }>();
 
+/**
+ * Alterna o status de coletada da figurinha
+ * Emite um evento com o ID da figurinha
+ */
 const toggleColetada = () => {
   emit("toggle", props.sticker.id);
 };

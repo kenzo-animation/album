@@ -1,12 +1,35 @@
+/**
+ * stickers.ts - Base de dados de figurinhas da Copa
+ * 
+ * Contém:
+ * - Interface Sticker com estrutura das figurinhas
+ * - Array com 24 figurinhas de diferentes seleções da Copa
+ * 
+ * Cada figurinha possui:
+ * - id: identificador único
+ * - numero: número da figurinha no álbum
+ * - nome: nome do jogador
+ * - selecao: seleção que representa
+ * - foto: URL da imagem (placeholder)
+ * - coletada: boolean indicando se já foi coletada
+ */
+
+/**
+ * Interface que define a estrutura de uma figurinha
+ */
 export interface Sticker {
-  id: number;
-  numero: number;
-  nome: string;
-  selecao: string;
-  foto: string;
-  coletada: boolean;
+  id: number; // Identificador único
+  numero: number; // Número da figurinha no álbum
+  nome: string; // Nome do jogador
+  selecao: string; // Seleção (Brasil, Portugal, França, etc)
+  foto: string; // URL da imagem
+  coletada: boolean; // Se já foi coletada pelo usuário
 }
 
+/**
+ * Array com todas as figurinhas disponíveis
+ * Total de 24 figurinhas de diferentes seleções da Copa
+ */
 export const stickersList: Sticker[] = [
   {
     id: 1,

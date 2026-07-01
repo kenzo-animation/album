@@ -40,6 +40,16 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * StickerList.vue - Componente que lista e filtra as figurinhas
+ * 
+ * Funcionalidades:
+ * - Exibe grid de figurinhas
+ * - Busca por nome ou seleção
+ * - Filtro por status (todas, coletadas, pendentes)
+ * - Alterna status de figurinhas
+ */
+
 import { ref, computed } from "vue";
 import {
   IonSearchbar,
@@ -51,23 +61,38 @@ import {
 import StickerCard from "./StickerCard.vue";
 import { useAlbum } from "@/composables/useAlbum";
 
+// Funções do composable de álbum
 const { pesquisar, filtrar, alternarColetada, obterFiguras } = useAlbum();
 
+// Termo de busca digitado
 const searchTerm = ref("");
+// Filtro selecionado
 const selectedFilter = ref("todas");
 
+/**
+ * Computed que retorna as figurinhas filtradas e pesquisadas
+ */
 const filteredStickers = computed(() => {
   return obterFiguras.value;
 });
 
+/**
+ * Processa mudança na busca
+ */
 const handleSearch = (event: any) => {
   pesquisar(event.detail.value);
 };
 
+/**
+ * Processa mudança no filtro
+ */
 const handleFilter = (event: any) => {
   filtrar(event.detail.value);
 };
 
+/**
+ * Alterna status de coletada de uma figurinha
+ */
 const handleToggle = (id: number) => {
   alternarColetada(id);
 };

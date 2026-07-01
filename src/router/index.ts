@@ -9,6 +9,7 @@ import ResetPasswordPage from '../views/ResetPasswordPage.vue'
 import HomePage from '../views/HomePage.vue'
 import CollectionPage from '../views/CollectionPage.vue'
 import ProfilePage from '../views/ProfilePage.vue'
+import ContatoForm from '../components/ContatoForm.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -49,6 +50,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/profile',
     name: 'Profile',
     component: ProfilePage,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/contact',
+    name: 'ContatoForm',
+    component: ContatoForm,
     meta: { requiresAuth: true }
   }
 ]

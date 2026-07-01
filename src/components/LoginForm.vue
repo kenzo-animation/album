@@ -88,7 +88,7 @@ const handleLogin = async () => {
     return;
   }
 
-  const result = login(email.value, senha.value);
+  const result = await login(email.value, senha.value);
 
   if (result.success) {
     const toast = await toastController.create({

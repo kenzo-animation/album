@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import {
   IonPage,
   IonContent,
@@ -77,7 +77,7 @@ import { useAlbum } from "@/composables/useAlbum";
 
 const router = useRouter();
 const { obterUsuarioLogado, logout } = useAuth();
-const { calcularProgresso } = useAlbum();
+const { calcularProgresso, carregarDoLocalStorage } = useAlbum();
 
 const usuario = computed(() => obterUsuarioLogado());
 const progresso = computed(() => calcularProgresso());
@@ -86,6 +86,10 @@ const handleLogout = () => {
   logout();
   router.push("/login");
 };
+
+onMounted(() => {
+  void carregarDoLocalStorage();
+});
 </script>
 
 <style scoped>

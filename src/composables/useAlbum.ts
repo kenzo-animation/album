@@ -1,50 +1,70 @@
 import { ref, computed } from "vue";
-import { stickersList, type Sticker } from "@/data/stickers";
+import { createOrSeedStickerCollection, getStickersForUser, toggleSticker } from "@/service/database";
+import { useAuth } from "@/composables/useAuth";
 
-const figurinhas = ref<Sticker[]>(JSON.parse(JSON.stringify(stickersList)));
+interface Sticker {
+  id: number;
+  stickerId: number;
+  nome: string;
+  selecao: string;
+  foto: string;
+  coletada: boolean;
+  userId: number;
+}
+
+const figurinhas = ref<Sticker[]>([]);
 const filtroAtual = ref<"todas" | "coletadas" | "pendentes">("todas");
 const termoBusca = ref<string>("");
 
 export function useAlbum() {
-  /**
-   * Marca uma figurinha como coletada
-   */
-  const marcarColetada = (id: number): void => {
-    const figurinha = figurinhas.value.find((f) => f.id === id);
-    if (figurinha) {
-      figurinha.coletada = true;
-      salvarNoLocalStorage();
-    }
+  const { obterUsuarioLogado } = useAuth();
+
+  const carregarDoBanco = async () => {
+    const user = obterUsuarioLogado();
+    if (!user) return;
+
+    const rows = await createOrSeedStickerCollection(user.id);
+    figurinhas.value = rows.map((row) => ({
+      id: row.id,
+      stickerId: row.stickerId,
+      nome: row.nome,
+      selecao: row.selecao,
+      foto: row.foto,
+      coletada: row.coletada,
+      userId: row.userId,
+    }));
   };
 
-  /**
-   * Remove figurinha das coletadas
-   */
-  const removerColetada = (id: number): void => {
-    const figurinha = figurinhas.value.find((f) => f.id === id);
-    if (figurinha) {
-      figurinha.coletada = false;
-      salvarNoLocalStorage();
-    }
+  const carregarDoLocalStorage = async () => {
+    await carregarDoBanco();
   };
 
-  /**
-   * Pesquisa figurinhas por nome ou seleção
-   */
+  const marcarColetada = async (id: number): Promise<void> => {
+    const user = obterUsuarioLogado();
+    if (!user) return;
+    const figurinha = figurinhas.value.find((f) => f.id === id || f.stickerId === id);
+    if (!figurinha) return;
+    await toggleSticker(user.id, figurinha.stickerId, true);
+    figurinha.coletada = true;
+  };
+
+  const removerColetada = async (id: number): Promise<void> => {
+    const user = obterUsuarioLogado();
+    if (!user) return;
+    const figurinha = figurinhas.value.find((f) => f.id === id || f.stickerId === id);
+    if (!figurinha) return;
+    await toggleSticker(user.id, figurinha.stickerId, false);
+    figurinha.coletada = false;
+  };
+
   const pesquisar = (termo: string): void => {
     termoBusca.value = termo.toLowerCase();
   };
 
-  /**
-   * Filtra figurinhas
-   */
   const filtrar = (tipo: "todas" | "coletadas" | "pendentes"): void => {
     filtroAtual.value = tipo;
   };
 
-  /**
-   * Calcula o progresso do álbum
-   */
   const calcularProgresso = (): {
     total: number;
     coletadas: number;
@@ -54,84 +74,53 @@ export function useAlbum() {
     const total = figurinhas.value.length;
     const coletadas = figurinhas.value.filter((f) => f.coletada).length;
     const pendentes = total - coletadas;
-    const percentual = Math.round((coletadas / total) * 100);
+    const percentual = total === 0 ? 0 : Math.round((coletadas / total) * 100);
 
-    return {
-      total,
-      coletadas,
-      pendentes,
-      percentual,
-    };
+    return { total, coletadas, pendentes, percentual };
   };
 
-  /**
-   * Obtém figurinhas filtradas e pesquisadas
-   */
   const obterFiguras = computed(() => {
     let resultado = figurinhas.value;
 
-    // Filtro por tipo
     if (filtroAtual.value === "coletadas") {
       resultado = resultado.filter((f) => f.coletada);
     } else if (filtroAtual.value === "pendentes") {
       resultado = resultado.filter((f) => !f.coletada);
     }
 
-    // Busca por termo
     if (termoBusca.value) {
       resultado = resultado.filter(
-        (f) =>
-          f.nome.toLowerCase().includes(termoBusca.value) ||
-          f.selecao.toLowerCase().includes(termoBusca.value)
+        (f) => f.nome.toLowerCase().includes(termoBusca.value) || f.selecao.toLowerCase().includes(termoBusca.value)
       );
     }
 
     return resultado;
   });
 
-  /**
-   * Obtém apenas figurinhas coletadas
-   */
-  const obterColetadas = computed(() => {
-    return figurinhas.value.filter((f) => f.coletada);
-  });
+  const obterColetadas = computed(() => figurinhas.value.filter((f) => f.coletada));
 
-  /**
-   * Alterna o status coletada de uma figurinha
-   */
-  const alternarColetada = (id: number): void => {
-    const figurinha = figurinhas.value.find((f) => f.id === id);
-    if (figurinha) {
-      figurinha.coletada = !figurinha.coletada;
-      salvarNoLocalStorage();
-    }
+  const alternarColetada = async (id: number): Promise<void> => {
+    const figurinha = figurinhas.value.find((f) => f.id === id || f.stickerId === id);
+    if (!figurinha) return;
+    await toggleSticker(obterUsuarioLogado()?.id ?? 0, figurinha.stickerId, !figurinha.coletada);
+    figurinha.coletada = !figurinha.coletada;
   };
 
-  /**
-   * Salva o estado das figurinhas no localStorage
-   */
-  const salvarNoLocalStorage = (): void => {
-    localStorage.setItem("album", JSON.stringify(figurinhas.value));
-  };
-
-  /**
-   * Carrega o estado das figurinhas do localStorage
-   */
-  const carregarDoLocalStorage = (): void => {
-    const salvo = localStorage.getItem("album");
-    if (salvo) {
-      figurinhas.value = JSON.parse(salvo);
-    }
-  };
-
-  /**
-   * Reseta o álbum para estado inicial
-   */
-  const resetarAlbum = (): void => {
-    figurinhas.value = JSON.parse(JSON.stringify(stickersList));
+  const resetarAlbum = async (): Promise<void> => {
+    const user = obterUsuarioLogado();
+    if (!user) return;
+    const rows = await createOrSeedStickerCollection(user.id);
+    figurinhas.value = rows.map((row) => ({
+      id: row.id,
+      stickerId: row.stickerId,
+      nome: row.nome,
+      selecao: row.selecao,
+      foto: row.foto,
+      coletada: row.coletada,
+      userId: row.userId,
+    }));
     termoBusca.value = "";
     filtroAtual.value = "todas";
-    salvarNoLocalStorage();
   };
 
   return {

@@ -114,7 +114,7 @@ const handleRegister = async () => {
     return;
   }
 
-  const result = register(nome.value, email.value, senha.value);
+  const result = await register(nome.value, email.value, senha.value);
 
   if (result.success) {
     const toast = await toastController.create({
