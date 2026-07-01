@@ -6,7 +6,7 @@
         <!-- Cabeçalho da página -->
         <ion-header>
             <ion-toolbar>
-                <ion-title>Configurações</ion-title>
+                <ion-title>Configuração</ion-title>
             </ion-toolbar>
         </ion-header>
         
