@@ -3,33 +3,32 @@
     <app-header titulo="Minha Coleção" :exibirBotaoLogout="false" />
 
     <ion-content>
-      <div v-if="coletadas.length === 0" class="empty-state">
+      <ion-card v-if="coletadas.length === 0" class="empty-state">
         <ion-icon :icon="imageOutline" size="large"></ion-icon>
-        <p>Você ainda não coletou nenhuma figurinha</p>
+        <ion-text>Você ainda não coletou nenhuma figurinha</ion-text>
         <ion-button color="primary" @click="irParaAlbum">Ir para o Álbum</ion-button>
-      </div>
+      </ion-card>
 
-      <div v-else>
-        <div class="collection-header">
-          <p class="collection-count">{{ coletadas.length }} figurinhas coletadas</p>
-        </div>
+      <ion-list v-else lines="none">
+        <ion-item class="collection-header" lines="none">
+          <ion-label class="collection-count">{{ coletadas.length }} figurinhas coletadas</ion-label>
+        </ion-item>
 
-        <div class="grid-container">
-          <sticker-card
-            v-for="sticker in coletadas"
-            :key="sticker.id"
-            :sticker="sticker"
-            @toggle="handleToggle"
-          />
-        </div>
-      </div>
+        <ion-grid class="grid-container">
+          <ion-row>
+            <ion-col v-for="sticker in coletadas" :key="sticker.id" size="6" size-md="4">
+              <sticker-card :sticker="sticker" @toggle="handleToggle" />
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-list>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
-import { IonPage, IonContent, IonIcon, IonButton } from "@ionic/vue";
+import { IonPage, IonContent, IonIcon, IonButton, IonCard, IonText, IonList, IonItem, IonLabel, IonGrid, IonRow, IonCol } from "@ionic/vue";
 import { imageOutline } from "ionicons/icons";
 import { useRouter } from "vue-router";
 import AppHeader from "@/components/AppHeader.vue";

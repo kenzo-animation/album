@@ -1,16 +1,7 @@
 import { ref, computed } from "vue";
-import { createOrSeedStickerCollection, getStickersForUser, toggleSticker } from "@/service/database";
+import { createOrSeedStickerCollection, toggleSticker } from "@/service/database";
 import { useAuth } from "@/composables/useAuth";
-
-interface Sticker {
-  id: number;
-  stickerId: number;
-  nome: string;
-  selecao: string;
-  foto: string;
-  coletada: boolean;
-  userId: number;
-}
+import { stickersList, type Sticker } from "@/data/stickers";
 
 const figurinhas = ref<Sticker[]>([]);
 const filtroAtual = ref<"todas" | "coletadas" | "pendentes">("todas");
@@ -23,16 +14,29 @@ export function useAlbum() {
     const user = obterUsuarioLogado();
     if (!user) return;
 
-    const rows = await createOrSeedStickerCollection(user.id);
-    figurinhas.value = rows.map((row) => ({
-      id: row.id,
-      stickerId: row.stickerId,
-      nome: row.nome,
-      selecao: row.selecao,
-      foto: row.foto,
-      coletada: row.coletada,
-      userId: row.userId,
-    }));
+    try {
+      const rows = await createOrSeedStickerCollection(user.id);
+      figurinhas.value = rows.map((row: any) => ({
+        id: row.id,
+        numero: row.stickerId,
+        stickerId: row.stickerId,
+        nome: row.nome,
+        selecao: row.selecao,
+        foto: row.foto,
+        coletada: Boolean(row.coletada),
+        userId: row.userId,
+      }));
+    } catch (error) {
+      console.warn("Falha ao carregar figurinhas do banco, usando dados locais.", error);
+      figurinhas.value = stickersList.map((sticker) => ({
+        ...sticker,
+        id: sticker.id,
+        numero: sticker.id,
+        stickerId: sticker.id,
+        coletada: false,
+        userId: user.id,
+      }));
+    }
   };
 
   const carregarDoLocalStorage = async () => {
@@ -44,7 +48,12 @@ export function useAlbum() {
     if (!user) return;
     const figurinha = figurinhas.value.find((f) => f.id === id || f.stickerId === id);
     if (!figurinha) return;
-    await toggleSticker(user.id, figurinha.stickerId, true);
+    const stickerId = figurinha.stickerId ?? figurinha.id;
+    try {
+      await toggleSticker(user.id, stickerId, true);
+    } catch (error) {
+      console.warn("Falha ao atualizar figurinha no banco, mantendo estado local.", error);
+    }
     figurinha.coletada = true;
   };
 
@@ -53,7 +62,12 @@ export function useAlbum() {
     if (!user) return;
     const figurinha = figurinhas.value.find((f) => f.id === id || f.stickerId === id);
     if (!figurinha) return;
-    await toggleSticker(user.id, figurinha.stickerId, false);
+    const stickerId = figurinha.stickerId ?? figurinha.id;
+    try {
+      await toggleSticker(user.id, stickerId, false);
+    } catch (error) {
+      console.warn("Falha ao atualizar figurinha no banco, mantendo estado local.", error);
+    }
     figurinha.coletada = false;
   };
 
@@ -102,23 +116,41 @@ export function useAlbum() {
   const alternarColetada = async (id: number): Promise<void> => {
     const figurinha = figurinhas.value.find((f) => f.id === id || f.stickerId === id);
     if (!figurinha) return;
-    await toggleSticker(obterUsuarioLogado()?.id ?? 0, figurinha.stickerId, !figurinha.coletada);
+    const stickerId = figurinha.stickerId ?? figurinha.id;
+    try {
+      await toggleSticker(obterUsuarioLogado()?.id ?? 0, stickerId, !figurinha.coletada);
+    } catch (error) {
+      console.warn("Falha ao alternar figurinha no banco, mantendo estado local.", error);
+    }
     figurinha.coletada = !figurinha.coletada;
   };
 
   const resetarAlbum = async (): Promise<void> => {
     const user = obterUsuarioLogado();
     if (!user) return;
-    const rows = await createOrSeedStickerCollection(user.id);
-    figurinhas.value = rows.map((row) => ({
-      id: row.id,
-      stickerId: row.stickerId,
-      nome: row.nome,
-      selecao: row.selecao,
-      foto: row.foto,
-      coletada: row.coletada,
-      userId: row.userId,
-    }));
+    try {
+      const rows = await createOrSeedStickerCollection(user.id);
+      figurinhas.value = rows.map((row: any) => ({
+        id: row.id,
+        numero: row.stickerId,
+        stickerId: row.stickerId,
+        nome: row.nome,
+        selecao: row.selecao,
+        foto: row.foto,
+        coletada: Boolean(row.coletada),
+        userId: row.userId,
+      }));
+    } catch (error) {
+      console.warn("Falha ao resetar o álbum, usando dados locais.", error);
+      figurinhas.value = stickersList.map((sticker) => ({
+        ...sticker,
+        id: sticker.id,
+        numero: sticker.id,
+        stickerId: sticker.id,
+        coletada: false,
+        userId: user.id,
+      }));
+    }
     termoBusca.value = "";
     filtroAtual.value = "todas";
   };

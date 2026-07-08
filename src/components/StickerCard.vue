@@ -2,13 +2,13 @@
   <ion-card class="sticker-card" @click="toggleColetada" :class="{ coletada: sticker.coletada }">
     <div class="sticker-image-container">
       <img :src="sticker.foto" :alt="sticker.nome" class="sticker-image" />
-      <div class="sticker-numero">{{ sticker.numero }}</div>
-      <div v-if="sticker.coletada" class="badge-coletada">✓ Coletada</div>
+      <ion-badge class="sticker-numero">{{ sticker.numero }}</ion-badge>
+      <ion-badge v-if="sticker.coletada" color="success" class="badge-coletada">✓ Coletada</ion-badge>
     </div>
     <ion-card-content>
-      <h2>{{ sticker.nome }}</h2>
-      <p class="selecao">{{ sticker.selecao }}</p>
-      <div class="button-container">
+      <ion-text class="sticker-name">{{ sticker.nome }}</ion-text>
+      <ion-text class="selecao">{{ sticker.selecao }}</ion-text>
+      <ion-buttons class="button-container">
         <ion-button
           size="small"
           :color="sticker.coletada ? 'danger' : 'success'"
@@ -16,7 +16,7 @@
         >
           {{ sticker.coletada ? "Remover" : "Coletar" }}
         </ion-button>
-      </div>
+      </ion-buttons>
     </ion-card-content>
   </ion-card>
 </template>
@@ -32,7 +32,7 @@
  * - Emite evento ao usuário clicar para alternar status
  */
 
-import { IonCard, IonCardContent, IonButton } from "@ionic/vue";
+import { IonCard, IonCardContent, IonButton, IonBadge, IonText, IonButtons } from "@ionic/vue";
 import { type Sticker } from "@/data/stickers";
 
 // Interface para as props do componente
@@ -128,7 +128,8 @@ ion-card-content {
   padding: 12px;
 }
 
-h2 {
+.sticker-name {
+  display: block;
   margin: 0 0 4px 0;
   font-size: 16px;
   font-weight: bold;

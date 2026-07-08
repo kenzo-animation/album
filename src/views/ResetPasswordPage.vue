@@ -12,9 +12,9 @@
     </ion-header>
 
     <ion-content class="reset-content">
-      <div class="reset-container">
+      <ion-card class="reset-container">
         <reset-password-form />
-      </div>
+      </ion-card>
     </ion-content>
   </ion-page>
 </template>
@@ -29,6 +29,7 @@ import {
   IonButtons,
   IonButton,
   IonIcon,
+  IonCard,
 } from "@ionic/vue";
 import { arrowBackOutline } from "ionicons/icons";
 import { useRouter } from "vue-router";

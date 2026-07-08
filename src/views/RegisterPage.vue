@@ -12,9 +12,9 @@
     </ion-header>
 
     <ion-content class="register-content">
-      <div class="register-container">
+      <ion-card class="register-container">
         <register-form />
-      </div>
+      </ion-card>
     </ion-content>
   </ion-page>
 </template>
@@ -29,6 +29,7 @@ import {
   IonButtons,
   IonButton,
   IonIcon,
+  IonCard,
 } from "@ionic/vue";
 import { arrowBackOutline } from "ionicons/icons";
 import { useRouter } from "vue-router";

@@ -3,36 +3,38 @@
     <app-header titulo="Álbum de Figurinhas" :exibirBotaoLogout="true" @logout="handleLogout" @contato="goToContato" />
 
     <ion-content>
-      <div class="album-header">
-        <div class="stats-container">
-          <div class="stat">
-            <span class="stat-value">{{ progresso.total }}</span>
-            <span class="stat-label">Total</span>
-          </div>
-          <div class="stat">
-            <span class="stat-value">{{ progresso.coletadas }}</span>
-            <span class="stat-label">Coletadas</span>
-          </div>
-          <div class="stat">
-            <span class="stat-value">{{ progresso.pendentes }}</span>
-            <span class="stat-label">Pendentes</span>
-          </div>
-        </div>
+      <ion-card class="album-header">
+        <ion-grid class="stats-container">
+          <ion-row>
+            <ion-col size="4">
+              <ion-card class="stat">
+                <ion-text class="stat-value">{{ progresso.total }}</ion-text>
+                <ion-text class="stat-label">Total</ion-text>
+              </ion-card>
+            </ion-col>
+            <ion-col size="4">
+              <ion-card class="stat">
+                <ion-text class="stat-value">{{ progresso.coletadas }}</ion-text>
+                <ion-text class="stat-label">Coletadas</ion-text>
+              </ion-card>
+            </ion-col>
+            <ion-col size="4">
+              <ion-card class="stat">
+                <ion-text class="stat-value">{{ progresso.pendentes }}</ion-text>
+                <ion-text class="stat-label">Pendentes</ion-text>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
 
-        <div class="progress-container">
-          <div class="progress-info">
-            <span>Progresso do Álbum</span>
-            <span class="progress-percent">{{ progresso.percentual }}%</span>
-          </div>
-          <div class="progress-bar">
-            <div
-              class="progress-fill"
-              :style="{ width: progresso.percentual + '%' }"
-            ></div>
-          </div>
-        </div>
-      </div>
-
+        <ion-card class="progress-container">
+          <ion-item class="progress-info" lines="none">
+            <ion-text>Progresso do Álbum</ion-text>
+            <ion-text slot="end" class="progress-percent">{{ progresso.percentual }}%</ion-text>
+          </ion-item>
+          <ion-progress-bar :value="progresso.percentual / 100"></ion-progress-bar>
+        </ion-card>
+      </ion-card>
 
       <sticker-list />
     </ion-content>
@@ -51,7 +53,7 @@
  */
 
 import { computed, onMounted } from "vue";
-import { IonPage, IonContent } from "@ionic/vue";
+import { IonPage, IonContent, IonCard, IonGrid, IonRow, IonCol, IonText, IonProgressBar, IonItem } from "@ionic/vue";
 import { useRouter } from "vue-router";
 import AppHeader from "@/components/AppHeader.vue";
 import StickerList from "@/components/StickerList.vue";
@@ -97,12 +99,10 @@ ion-content {
   padding: 20px;
   border-radius: 0 0 16px 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 0;
 }
 
 .stats-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
   margin-bottom: 20px;
 }
 
@@ -112,6 +112,7 @@ ion-content {
   border-radius: 12px;
   text-align: center;
   backdrop-filter: blur(10px);
+  margin: 0;
 }
 
 .stat-value {
@@ -129,6 +130,9 @@ ion-content {
 
 .progress-container {
   margin-top: 20px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
 }
 
 .progress-info {
@@ -140,20 +144,6 @@ ion-content {
 
 .progress-percent {
   font-weight: bold;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
-  transition: width 0.3s ease;
 }
 
 .home-actions {

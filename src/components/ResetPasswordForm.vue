@@ -9,9 +9,9 @@
         @blur="validateEmail"
       ></ion-input>
     </ion-item>
-    <div v-if="emailError" class="error-message">
+    <ion-text v-if="emailError" color="danger" class="error-message">
       {{ emailError }}
-    </div>
+    </ion-text>
 
     <ion-button
       expand="block"
@@ -22,15 +22,15 @@
       Enviar E-mail de Recuperação
     </ion-button>
 
-    <div class="links">
+    <ion-text class="links">
       <router-link to="/login">Voltar ao login</router-link>
-    </div>
+    </ion-text>
   </form>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { IonItem, IonLabel, IonInput, IonButton, alertController } from "@ionic/vue";
+import { IonItem, IonLabel, IonInput, IonButton, IonText, alertController } from "@ionic/vue";
 import { useAuth } from "@/composables/useAuth";
 import { useRouter } from "vue-router";
 

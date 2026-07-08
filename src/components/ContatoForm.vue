@@ -4,13 +4,13 @@
     <ion-label position="stacked">Nome</ion-label>
     <ion-input v-model="form.nome" :class="{ 'error': errors.nome }"></ion-input>
   </ion-item>
-  <div v-if="errors.nome" class="error-message">{{ errors.nome }}</div>
+  <ion-text v-if="errors.nome" color="danger" class="error-message">{{ errors.nome }}</ion-text>
 
   <ion-item>
     <ion-label position="stacked">Email</ion-label>
     <ion-input v-model="form.email" :class="{ 'error': errors.email }"></ion-input>
   </ion-item>
-  <div v-if="errors.email" class="error-message">{{ errors.email }}</div>
+  <ion-text v-if="errors.email" color="danger" class="error-message">{{ errors.email }}</ion-text>
 
   <ion-item>
     <ion-label position="stacked">Telefone</ion-label>
@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
 import { addContato } from '@/service/database';
-import { IonList, IonItem, IonLabel, IonInput, IonButton } from '@ionic/vue';
+import { IonList, IonItem, IonLabel, IonInput, IonButton, IonText } from '@ionic/vue';
 
 const form = reactive({
   nome: '',

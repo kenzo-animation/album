@@ -7,21 +7,21 @@
     </ion-header>
 
     <ion-content class="login-content">
-      <div class="login-container">
-        <div class="logo">
-          <h1>🏆</h1>
-          <h2>Álbum de Figurinhas</h2>
-          <p>Copa do Mundo</p>
-        </div>
+      <ion-card class="login-container">
+        <ion-card-header class="logo">
+          <ion-text class="logo-icon">🏆</ion-text>
+          <ion-title class="logo-title">Álbum de Figurinhas</ion-title>
+          <ion-text class="logo-subtitle">Copa do Mundo</ion-text>
+        </ion-card-header>
 
         <login-form />
-      </div>
+      </ion-card>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from "@ionic/vue";
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonText } from "@ionic/vue";
 import LoginForm from "@/components/LoginForm.vue";
 </script>
 
@@ -50,19 +50,21 @@ import LoginForm from "@/components/LoginForm.vue";
   text-align: center;
 }
 
-.logo h1 {
+.logo-icon {
+  display: block;
   font-size: 64px;
-  margin: 0;
+  margin-bottom: 8px;
 }
 
-.logo h2 {
-  margin: 10px 0 5px 0;
+.logo-title {
+  color: white;
   font-size: 24px;
   font-weight: bold;
+  margin-bottom: 4px;
 }
 
-.logo p {
-  margin: 0;
+.logo-subtitle {
+  display: block;
   font-size: 14px;
   opacity: 0.9;
 }

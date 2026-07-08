@@ -14,10 +14,12 @@ import ContatoForm from '../components/ContatoForm.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: () => {
-      const { estaLogado } = useAuth();
-      return estaLogado() ? '/home' : '/login';
-    }
+    redirect: '/login'
+    
+    // () => {
+    //   const { estaLogado } = useAuth();
+    //   return estaLogado() ? '/home' : '/login';
+    // }
   },
   {
     path: '/login',
