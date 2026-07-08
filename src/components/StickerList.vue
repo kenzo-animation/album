@@ -135,7 +135,6 @@ ion-segment-button.segment-button-checked {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 10px;
   padding: 10px;
 }
@@ -149,9 +148,4 @@ ion-segment-button.segment-button-checked {
   color: #999;
 }
 
-@media (max-width: 600px) {
-  .grid-container {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  }
-}
 </style>
