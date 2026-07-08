@@ -1,14 +1,14 @@
 <template>
-  <div class="sticker-list">
-    <div class="search-bar">
+  <ion-list class="sticker-list" lines="none">
+    <ion-item class="search-bar" lines="none">
       <ion-searchbar
         v-model="searchTerm"
         @ion-input="handleSearch"
         placeholder="Pesquisar por nome ou seleção..."
       ></ion-searchbar>
-    </div>
+    </ion-item>
 
-    <div class="filters">
+    <ion-item class="filters" lines="none">
       <ion-segment v-model="selectedFilter" @ion-change="handleFilter">
         <ion-segment-button value="todas">
           <ion-label>Todas</ion-label>
@@ -20,23 +20,22 @@
           <ion-label>Pendentes</ion-label>
         </ion-segment-button>
       </ion-segment>
-    </div>
+    </ion-item>
 
     <ion-content>
-      <div v-if="filteredStickers.length === 0" class="no-results">
-        <p>Nenhuma figurinha encontrada</p>
-      </div>
+      <ion-text v-if="filteredStickers.length === 0" class="no-results">
+        Nenhuma figurinha encontrada
+      </ion-text>
 
-      <div v-else class="grid-container">
-        <sticker-card
-          v-for="sticker in filteredStickers"
-          :key="sticker.id"
-          :sticker="sticker"
-          @toggle="handleToggle"
-        />
-      </div>
+      <ion-grid v-else class="grid-container">
+        <ion-row>
+          <ion-col v-for="sticker in filteredStickers" :key="sticker.id" size="6" size-md="4">
+            <sticker-card :sticker="sticker" @toggle="handleToggle" />
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-content>
-  </div>
+  </ion-list>
 </template>
 
 <script setup lang="ts">
@@ -57,6 +56,12 @@ import {
   IonSegmentButton,
   IonLabel,
   IonContent,
+  IonList,
+  IonItem,
+  IonText,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from "@ionic/vue";
 import StickerCard from "./StickerCard.vue";
 import { useAlbum } from "@/composables/useAlbum";
@@ -130,7 +135,6 @@ ion-segment-button.segment-button-checked {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 10px;
   padding: 10px;
 }
@@ -144,9 +148,4 @@ ion-segment-button.segment-button-checked {
   color: #999;
 }
 
-@media (max-width: 600px) {
-  .grid-container {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  }
-}
 </style>

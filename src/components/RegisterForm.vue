@@ -9,9 +9,9 @@
         @blur="validateNome"
       ></ion-input>
     </ion-item>
-    <div v-if="nomeError" class="error-message">
+    <ion-text v-if="nomeError" color="danger" class="error-message">
       {{ nomeError }}
-    </div>
+    </ion-text>
 
     <ion-item>
       <ion-label position="floating">E-mail</ion-label>
@@ -22,9 +22,9 @@
         @blur="validateEmail"
       ></ion-input>
     </ion-item>
-    <div v-if="emailError" class="error-message">
+    <ion-text v-if="emailError" color="danger" class="error-message">
       {{ emailError }}
-    </div>
+    </ion-text>
 
     <ion-item>
       <ion-label position="floating">Senha</ion-label>
@@ -35,9 +35,9 @@
         @blur="validatePassword"
       ></ion-input>
     </ion-item>
-    <div v-if="senhaError" class="error-message">
+    <ion-text v-if="senhaError" color="danger" class="error-message">
       {{ senhaError }}
-    </div>
+    </ion-text>
 
     <ion-button
       expand="block"
@@ -48,15 +48,15 @@
       Criar Conta
     </ion-button>
 
-    <div class="links">
+    <ion-text class="links">
       <router-link to="/login">Voltar ao login</router-link>
-    </div>
+    </ion-text>
   </form>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { IonItem, IonLabel, IonInput, IonButton, toastController } from "@ionic/vue";
+import { IonItem, IonLabel, IonInput, IonButton, IonText, toastController } from "@ionic/vue";
 import { useAuth } from "@/composables/useAuth";
 import { useRouter } from "vue-router";
 

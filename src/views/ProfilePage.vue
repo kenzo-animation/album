@@ -3,31 +3,26 @@
     <app-header titulo="Perfil" :exibirBotaoLogout="true" @logout="handleLogout" />
 
     <ion-content>
-      <div class="profile-container">
-        <div class="profile-header">
-          <div class="profile-avatar">
+      <ion-card class="profile-container">
+        <ion-card class="profile-header">
+          <ion-avatar class="profile-avatar">
             <ion-icon :icon="personCircleOutline"></ion-icon>
-          </div>
-          <h2>{{ usuario?.nome }}</h2>
-          <p class="email">{{ usuario?.email }}</p>
-        </div>
+          </ion-avatar>
+          <ion-title class="profile-name">{{ usuario?.nome }}</ion-title>
+          <ion-text class="email">{{ usuario?.email }}</ion-text>
+        </ion-card>
 
         <ion-card>
           <ion-card-content>
-            <div class="profile-stat">
-              <span class="stat-label">Figurinhas Coletadas</span>
-              <span class="stat-value">{{ progresso.coletadas }} / {{ progresso.total }}</span>
-            </div>
+            <ion-item class="profile-stat" lines="none">
+              <ion-text class="stat-label">Figurinhas Coletadas</ion-text>
+              <ion-text slot="end" class="stat-value">{{ progresso.coletadas }} / {{ progresso.total }}</ion-text>
+            </ion-item>
 
-            <div class="profile-progress">
-              <div class="progress-bar">
-                <div
-                  class="progress-fill"
-                  :style="{ width: progresso.percentual + '%' }"
-                ></div>
-              </div>
-              <p class="progress-text">{{ progresso.percentual }}% completo</p>
-            </div>
+            <ion-item class="profile-progress" lines="none">
+              <ion-progress-bar :value="progresso.percentual / 100"></ion-progress-bar>
+            </ion-item>
+            <ion-text class="progress-text">{{ progresso.percentual }}% completo</ion-text>
 
             <ion-list>
               <ion-item>
@@ -46,12 +41,12 @@
           </ion-card-content>
         </ion-card>
 
-        <div class="profile-actions">
+        <ion-item class="profile-actions" lines="none">
           <ion-button expand="block" color="danger" @click="handleLogout">
             Fazer Logout
           </ion-button>
-        </div>
-      </div>
+        </ion-item>
+      </ion-card>
     </ion-content>
   </ion-page>
 </template>
@@ -68,6 +63,10 @@ import {
   IonLabel,
   IonButton,
   IonIcon,
+  IonText,
+  IonTitle,
+  IonProgressBar,
+  IonAvatar,
 } from "@ionic/vue";
 import { personCircleOutline } from "ionicons/icons";
 import { useRouter } from "vue-router";
@@ -116,14 +115,14 @@ ion-content {
   margin-bottom: 15px;
 }
 
-.profile-header h2 {
+.profile-name {
   margin: 0 0 5px 0;
   font-size: 24px;
   color: #333;
 }
 
 .email {
-  margin: 0;
+  display: block;
   color: #999;
   font-size: 14px;
 }
@@ -155,23 +154,14 @@ ion-card {
   margin: 20px 0;
 }
 
-.progress-bar {
-  width: 100%;
-  height: 8px;
-  background: #eee;
-  border-radius: 10px;
-  overflow: hidden;
+ion-progress-bar {
+  --progress-background: #dcefe9;
+  --background: #eee;
   margin-bottom: 10px;
 }
 
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #1abc9c 0%, #16a085 100%);
-  transition: width 0.3s ease;
-}
-
 .progress-text {
-  margin: 0;
+  display: block;
   text-align: center;
   color: #999;
   font-size: 12px;

@@ -4,9 +4,9 @@
         <ion-item-sliding v-for="contato in contatos" :key="contato.id">
             <ion-item>
                 <ion-label>
-                    <h2>{{ contato.nome }}</h2>
-                    <p>{{ contato.email }}</p>
-                    <p>{{ contato.telefone }}</p>
+                    <ion-text class="contact-name">{{ contato.nome }}</ion-text>
+                    <ion-text class="contact-info">{{ contato.email }}</ion-text>
+                    <ion-text class="contact-info">{{ contato.telefone }}</ion-text>
                 </ion-label>
             </ion-item>
             <ion-item-options side="end">
@@ -52,8 +52,8 @@
  
     <script setup lang ="ts">
     import {ref, onMounted, onBeforeUnmount, computed} from 'vue'
-    import {IonAlert, IonItem, IonItemOption, IonItemSliding, IonLabel, IonList} from '@ionic/vue'
-    import {listContatos, updateContato, deleteContatoById} from '@/servece/database'
+    import {IonAlert, IonItem, IonItemOption, IonItemSliding, IonLabel, IonList, IonText} from '@ionic/vue'
+    import {listContatos, updateContato, deleteContatoById} from '@/service/database'
  
 const contatos = ref<any[]>([])
 const editAlert = ref({open: false, error:'', data: {id: null as number | null, nome: '', email: '', telefone: ''}})
