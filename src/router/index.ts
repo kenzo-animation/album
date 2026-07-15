@@ -1,5 +1,4 @@
-import { createRouter, createWebHistory } from "@ionic/vue-router";
-import { RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "@ionic/vue-router";
 import TabsPage from "../views/TabsPage.vue";
 
 import { useAuth } from "@/composables/useAuth";
@@ -16,12 +15,12 @@ import ContatoForm from "../components/ContatoForm.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/login",
+    redirect:  () => {
+       const { estaLogado } = useAuth();
+       return estaLogado() ? '/tabs/home' : '/login';
+     }
 
-    // () => {
-    //   const { estaLogado } = useAuth();
-    //   return estaLogado() ? '/home' : '/login';
-    // }
+    
   },
   {
     path: "/tabs/",
@@ -33,25 +32,25 @@ const routes: Array<RouteRecordRaw> = [
       },
 
       {
-        path: "/home",
+        path: "home",
         name: "Home",
         component: HomePage,
         meta: { requiresAuth: true },
       },
       {
-        path: "/collection",
+        path: "collection",
         name: "Collection",
         component: CollectionPage,
         meta: { requiresAuth: true },
       },
       {
-        path: "/profile",
+        path: "profile",
         name: "Profile",
         component: ProfilePage,
         meta: { requiresAuth: true },
       },
       {
-        path: "/contact",
+        path: "contact",
         name: "ContatoForm",
         component: ContatoForm,
         meta: { requiresAuth: true },
@@ -68,11 +67,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "Register",
     component: RegisterPage,
   },
-  {
-    path: "/reset-password",
-    name: "ResetPassword",
-    component: ResetPasswordPage,
-  },
+   {
+        path: "/reset-password",
+        name: "ResetPassword",
+        component: ResetPasswordPage,
+      },
 ];
 
 const router = createRouter({
@@ -94,7 +93,7 @@ router.beforeEach((to, from, next) => {
       to.path === "/reset-password") &&
     estaLogado()
   ) {
-    next("/home");
+    next("/tabs/home");
   } else {
     next();
   }
